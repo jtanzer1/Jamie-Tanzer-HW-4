@@ -52,14 +52,21 @@ f.close()
 ## Write your code to complete this task here.
 ## HINT: Remember that you'll need to open the file you created in Part 1, read the contets into one big string, and make a BeautifulSoup object out of that string!
 ## NOTE that the provided link does not include saving the online data in a file as part of the process. But it still provides very useful hints/tricks about how to look for and identify the headlines on the NY Times page.
+
+g= open("nytimes_data.html", "r")
+read_file= g.read()
+soup = BeautifulSoup(read_file, 'html.parser')
+
 nytimes_headlines=[]
-headline=soup.findALL('h2',{'class':'story-heading'})
-for story_heading in soup.find_all(class= 'story-heading'):
+headline=soup.find_all(class_= 'story-heading')
+for story_heading in headline:
 	if story_heading.a:
 		x= story_heading.a.text.replace("\n", "").strip()
 	else:
 		y= story_heading.contents[0].strip()
 		nytimes_headlines.append(y)
+nytimes_headlines=nytimes_headlines[:10]
+print (nytimes_headlines)
 
 
 
@@ -89,8 +96,23 @@ htmldoc = response.text
 soup = BeautifulSoup(htmldoc,"html.parser")
 people = soup.find_all("div",{"class":"views-row"})
 umsi_titles = {}
-for x in people:
-	umsi_titles[x[0]]
+# for x in people:
+# 	umsi_titles[x[0]]
+for each_person in people:
+	key=''
+	value=''
+	for each_name in each_person.find_all('div', {'property':'dc:title'}):
+		key= each_name.h2.text
+
+	for each_job in each_person.find_all('div', class_='field-name-field-person-titles'):
+		value= each_job.div.div.text
+
+	umsi_titles[key]= value
+
+
+
+
+
 	
 
 ## It may be helpful to translate the following from English to code:
